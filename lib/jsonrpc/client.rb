@@ -142,10 +142,11 @@ module JSONRPC
 
   class Client < Base
     def method_missing(method, *args, &block)
-      invoke(method, args)
+      return invoke(method, args) if args.length > 1
+      invoke(method, *args)
     end
 
-    def invoke(method, args, options = nil)
+    def invoke(method, args = [], options = nil)
       resp = send_single_request(method.to_s, args, options)
 
       begin
